@@ -69,6 +69,9 @@ printf '[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n' > /usr/lib/ost
 rm -rf /tmp/*
 find /run -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 
+umount /var/log
+umount /var/cache
+
 rm -rf /{boot,home,root,srv,mnt,var,usr/local}
 
 rm -rf /usr/lib/sysimage/{log,cache/xbps}
