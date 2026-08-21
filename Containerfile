@@ -5,13 +5,14 @@ COPY files /
 # Base Image
 FROM ghcr.io/void-linux/void-glibc-full:latest
 
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /deimos_core/scripts/install-bootc.sh
 
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
