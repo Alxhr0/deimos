@@ -62,4 +62,5 @@ RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
 
 ### LINTING
 ## Verify final image and contents are correct.
+LABEL containers.bootc=1
 RUN bootc container lint
