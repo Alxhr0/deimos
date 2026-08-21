@@ -14,6 +14,6 @@ elif [ -f "/boot/vmlinuz" ]; then
     cp -a "/boot/vmlinuz" "/usr/lib/modules/$QUALIFIED_KERNEL/vmlinuz"
 fi
 
-/usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree --add-drivers "erofs overlay" -f "/usr/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
+/usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree --add bootc -f "/usr/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 
 chmod 0600 /usr/lib/modules/"$QUALIFIED_KERNEL"/initramfs.img
