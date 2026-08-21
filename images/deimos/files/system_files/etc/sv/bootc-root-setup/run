@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec /usr/lib/bootc/initramfs-setup setup-root

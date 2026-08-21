@@ -16,13 +16,44 @@ RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /deimos_core/scripts/install-bootc.sh
+    rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /deimos_core/scripts/build.sh
+    /deimos_core/scripts/setup/users.sh
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /deimos_core/scripts/setup/install-bootc.sh
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /deimos_core/scripts/setup/build.sh
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /deimos_core/scripts/final/build-initramfs.sh
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /deimos_core/scripts/final/workarounds.sh
+
+RUN --mount=type=bind,from=deimos_core,source=/,target=/deimos_core \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /deimos_core/scripts/final/clean-up.sh
+
 
 ### LINTING
 ## Verify final image and contents are correct.
