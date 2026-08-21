@@ -1,6 +1,7 @@
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS deimos_core
-COPY files /
+
+COPY images/deimos/files /
 
 # Base Image
 FROM ghcr.io/void-linux/void-glibc-full:latest
