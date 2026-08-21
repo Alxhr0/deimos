@@ -7,21 +7,62 @@ cp -avf "/ctx/system_files"/. /
 
 ### Install packages
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
 
-# this installs a package from fedora repos
-dnf5 install -y tmux
+PACKAGES=(
+    base-system
+    glibc-locales
+    bash-completion
+    bubblewrap
+    cpio
+    dracut
+    efibootmgr
+    iwd
+    linux7.2
+    linux7.2-headers
+    linux-firmware
+    linux-firmware-intel
+    NetworkManager
+    ostree
+    btrfs-progs
+    e2fsprogs
+    xfsprogs
+    dosfstools
+    skopeo
+    dbus
+    dbus-glib
+    glib
+    shadow
+    openssh
+    sudo
+    eudev
+    elogind
+)
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
 
-#### Example for enabling a System Unit File
+xbps-install -y -S fastfetch NetworkManager
 
-systemctl enable podman.socket
+ln -s /etc/sv/elogind /etc/runit/runsvdir/default/
+ln -s /etc/sv/dbus /etc/runit/runsvdir/default/
+ln -s /etc/sv/NetworkManager /etc/runit/runsvdir/default/
+
+rm -rf /{boot,home,root,srv,mnt,var,usr/local}
+
+rm -rf /usr/lib/sysimage/{log,cache/pacman/pkg}
+
+rm -rf /{build,packages}
+
+mkdir -p /sysroot /boot /usr/lib/ostree /var
+
+ln -sT sysroot/ostree /ostree
+
+ln -sT var/roothome /root
+
+ln -sT var/srv /srv
+
+ln -sT var/mnt /mnt
+
+ln -sT var/opt /opt
+
+ln -sT var/home /home
+
+ln -sT ../var/usrlocal /usr/local
