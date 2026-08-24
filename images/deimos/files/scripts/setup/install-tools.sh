@@ -39,7 +39,25 @@ ninja -C build install
 # Ostree
 export CUSTOM_FLAGS="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig"
 cd /tmp/void-packages
-su builder -c "perl -0777 -pi -e 's/configure_args=\".*?\"/configure_args=\"$CUSTOM_FLAGS\"/s' /tmp/void-packages/srcpkgs/ostree/template"
+python3 -c '
+from pathlib import Path
+
+p = Path("/tmp/void-packages/srcpkgs/ostree/template")
+text = p.read_text()
+
+# Strip out existing multiline configure_args using split
+prefix = text.split("configure_args=")[0]
+suffix = text.split("configure_args=")[1].split("\"", 2)[2]
+
+new_args = """configure_args="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig" """
+
+text = prefix + new_args + suffix
+
+# Add libcomposefs-devel to makedepends cleanly
+text = text.replace("makedepends=\"", "makedepends=\"libcomposefs-devel ", 1)
+
+p.write_text(text)
+'
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree
 
