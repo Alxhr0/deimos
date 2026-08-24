@@ -26,6 +26,13 @@ composefs_package() {
     }
 }
 
+libcomposefs_package() {
+    short_desc+=" - shared library"
+    pkg_install() {
+        vmove "usr/lib/*.so.*"
+    }
+}
+
 libcomposefs-devel_package() {
 	depends="${sourcepkg}>=${version}_${revision}
 	 openssl-devel"
@@ -33,6 +40,5 @@ libcomposefs-devel_package() {
 	pkg_install() {
 		vmove usr/include
 		vmove usr/lib/pkgconfig
-		vmove "usr/lib/*.so"
 	}
 }
