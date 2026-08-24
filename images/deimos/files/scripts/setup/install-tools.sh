@@ -27,16 +27,12 @@ xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f xbps libxbps
 xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go-md2man pkgconf python3-setuptools
 
 # Composefs
-cd /tmp/void-packages
-echo "libcomposefs.so.1 libcomposefs-1.0_1" >> common/shlibs
-su builder -c "./xbps-src pkg composefs"
+echo "libcomposefs.so.1 libcomposefs-1.0.8_1" >> common/shlibs
 
 # Ostree
 cd /tmp/void-packages
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
-
-xbps-rindex -a /tmp/void-packages/hostdir/binpkgs/*.xbps
-xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f composefs libcomposefs-devel ostree libostree-devel
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree libostree-devel
 
 # Bootc
 cd /tmp/void-packages

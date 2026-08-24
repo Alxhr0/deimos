@@ -5,7 +5,7 @@ revision=1
 build_style=gnu-configure
 build_helper="gir"
 configure_args="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig" 
-hostmakedepends="bison docbook-xsl composefs glib-devel libxslt pkg-config"
+hostmakedepends="bison docbook-xsl glib-devel libxslt pkg-config"
 makedepends="e2fsprogs-devel libcomposefs-devel fuse-devel glib-devel gpgme-devel libarchive-devel
  libcurl-devel libsodium-devel $(vopt_if gir 'gobject-introspection') libsoup3-devel"
 checkdepends="attr-progs cpio elfutils gnupg python3-yaml tar which xz jq"
