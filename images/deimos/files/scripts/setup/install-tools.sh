@@ -28,6 +28,7 @@ xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go
 
 # Composefs
 cd /tmp/void-packages
+echo "libcomposefs.so.1 libcomposefs-1.0_1" >> common/shlibs
 su builder -c "./xbps-src pkg composefs"
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f composefs libcomposefs-devel
 
