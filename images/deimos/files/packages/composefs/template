@@ -1,0 +1,38 @@
+# Template file for 'composefs'
+pkgname=composefs
+version=1.0.8
+revision=1
+build_style=meson
+configure_args="--prefix=/usr"
+hostmakedepends="libxslt pkg-config"
+makedepends="openssl-devel fuse3-devel meson"
+checkdepends="attr-progs cpio elfutils gnupg python3-yaml tar which xz jq"
+short_desc="The reliability of disk images, the flexibility of files"
+maintainer="Alxhr0"
+license=(
+    "LGPL-2.1-or-later"
+    'BSD-2-Clause OR GPL-2.0-or-later'
+    'GPL-2.0-only OR Apache-2.0'
+    "GPL-3.0-or-later"
+)
+homepage="https://github.com/composefs/composefs"
+changelog="https://github.com/composefs/composefs/release"
+distfiles="https://github.com/composefs/composefs/releases/download/v${version}/composefs-${version}.tar.xz"
+checksum=207384deb196198ac4764c5b42bb558f7c661494302b380afc09447678538386
+
+composefs_package() {
+    pkg_install() {
+        vmove usr/bin
+    }
+}
+
+libcomposefs-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}
+	 openssl-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove "usr/lib/*.so"
+	}
+}

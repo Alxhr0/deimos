@@ -4,7 +4,6 @@ set -ouex pipefail
 
 xbps-install -y -Su
 
-
 # Rebuild xbps to match the image
 
 mkdir -p /usr/lib/sysimage/var/lib /usr/lib/sysimage/cache/xbps
@@ -16,6 +15,7 @@ xbps-install -y -S git
 
 cd /tmp
 git clone https://github.com/void-linux/void-packages.git --depth=1
+cp -r /deimos_core/packages/* void-packages
 chown builder:builder -R void-packages
 
 cd void-packages
@@ -24,39 +24,17 @@ su builder -c "sed -i 's|--sysconfdir=/etc|--sysconfdir=/etc --dbdir=/usr/lib/sy
 su builder -c "./xbps-src pkg xbps"
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f xbps libxbps
 
-xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go-md2man ostree libostree-devel pkgconf python3-setuptools
+xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go-md2man pkgconf python3-setuptools
 
 # Composefs
-cd /tmp
-wget https://github.com/composefs/composefs/releases/download/v1.0.8/composefs-1.0.8.tar.xz
-tar -xvf composefs-1.0.8.tar.xz
-cd composefs-1.0.8
-meson setup build --prefix=/usr
-ninja -C build
-ninja -C build install
-
+cd /tmp/void-packages
+su builder -c "./xbps-src pkg composefs"
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f composefs libcomposefs-devel
 
 # Ostree
-export CUSTOM_FLAGS="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig"
 cd /tmp/void-packages
-python3 -c '
-from pathlib import Path
-
-p = Path("/tmp/void-packages/srcpkgs/ostree/template")
-text = p.read_text()
-
-# Strip out existing multiline configure_args using split
-prefix = text.split("configure_args=")[0]
-suffix = text.split("configure_args=")[1].split("\"", 2)[2]
-
-new_args = """configure_args="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig" """
-
-text = prefix + new_args + suffix
-
-p.write_text(text)
-'
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
-xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree libostree-devel
 
 # Bootc
 
