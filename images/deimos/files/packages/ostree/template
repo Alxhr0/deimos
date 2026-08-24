@@ -22,6 +22,12 @@ build_options_default="gir"
 
 post_install() {
 	vcompletion bash/ostree bash
+
+    if [ -d "${DESTDIR}/etc/dracut.conf.d" ]; then
+        vmkdir usr/lib/dracut/dracut.conf.d
+        mv "${DESTDIR}/etc/dracut.conf.d"/* "${DESTDIR}/usr/lib/dracut/dracut.conf.d/"
+        rmdir "${DESTDIR}/etc/dracut.conf.d"
+    fi
 }
 
 libostree_package() {
