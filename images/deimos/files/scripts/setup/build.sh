@@ -13,12 +13,18 @@ cp -a /var/db/xbps/keys/. /usr/lib/sysimage/var/db/xbps/keys/
 cd /tmp
 git clone https://github.com/void-linux/void-packages.git --depth=1
 chown builder:builder -R void-packages
+
 cd void-packages
 su builder -c "./xbps-src binary-bootstrap"
 su builder -c "sed -i 's|--sysconfdir=/etc|--sysconfdir=/etc --dbdir=/usr/lib/sysimage/var/db/xbps|' srcpkgs/xbps/template"
 su builder -c "./xbps-src pkg xbps"
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f xbps libxbps
 
+# Ostree
+CUSTOM_FLAGS="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig"
+su builder -c 'sed -i "s|^configure_args=.*|configure_args=\"$CUSTOM_FLAGS\"|" srcpkgs/ostree/template'
+su builder -c './xbps-src pkg ostree'
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree
 
 ## Install packages
 PACKAGES=(
@@ -35,7 +41,6 @@ PACKAGES=(
     linux-firmware
     linux-firmware-intel
     NetworkManager
-    ostree
     btrfs-progs
     e2fsprogs
     xfsprogs
