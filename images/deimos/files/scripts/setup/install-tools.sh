@@ -15,7 +15,7 @@ xbps-install -y -S git
 
 cd /tmp
 git clone https://github.com/void-linux/void-packages.git --depth=1
-cp -r /deimos_core/packages/* void-packages
+cp -r /deimos_core/packages/* void-packages/srcpkgs
 chown builder:builder -R void-packages
 
 cd void-packages
