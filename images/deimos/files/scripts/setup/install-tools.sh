@@ -12,6 +12,8 @@ mkdir -p /usr/lib/sysimage/var/db/xbps/keys
 
 cp -a /var/db/xbps/keys/. /usr/lib/sysimage/var/db/xbps/keys/
 
+xbps-install -y -S git
+
 cd /tmp
 git clone https://github.com/void-linux/void-packages.git --depth=1
 chown builder:builder -R void-packages
@@ -22,7 +24,7 @@ su builder -c "sed -i 's|--sysconfdir=/etc|--sysconfdir=/etc --dbdir=/usr/lib/sy
 su builder -c "./xbps-src pkg xbps"
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f xbps libxbps
 
-xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget git rust cargo go-md2man ostree libostree-devel pkgconf python3-setuptools
+xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go-md2man ostree libostree-devel pkgconf python3-setuptools
 
 # Composefs
 cd /tmp
