@@ -37,10 +37,10 @@ ninja -C build install
 
 
 # Ostree
-CUSTOM_FLAGS="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig"
+export CUSTOM_FLAGS="--without-libsystemd --with-dracut=yes --with-composefs --with-curl --with-openssl --with-ed25519-libsodium --with-modern-grub --disable-static --enable-experimental-api --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig"
 cd /tmp/void-packages
-su builder -c 'sed -i "s|^configure_args=.*|configure_args=\"$CUSTOM_FLAGS\"|" srcpkgs/ostree/template'
-su builder -c './xbps-src pkg ostree'
+su builder -c "perl -0777 -pi -e 's/configure_args=\".*?\"/configure_args=\"$CUSTOM_FLAGS\"/s' /tmp/void-packages/srcpkgs/ostree/template"
+su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree
 
 # Bootc
