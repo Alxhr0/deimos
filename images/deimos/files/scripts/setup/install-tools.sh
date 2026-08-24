@@ -30,15 +30,18 @@ xbps-install -y -S base-devel openssl-devel fuse3-devel meson wget rust cargo go
 cd /tmp/void-packages
 echo "libcomposefs.so.1 libcomposefs-1.0_1" >> common/shlibs
 su builder -c "./xbps-src pkg composefs"
-xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f composefs libcomposefs-devel
 
 # Ostree
 cd /tmp/void-packages
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
-xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree libostree-devel
+
+xbps-rindex -a /tmp/void-packages/hostdir/binpkgs/*.xbps
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f composefs libcomposefs-devel ostree libostree-devel
 
 # Bootc
 cd /tmp/void-packages
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg bootc'
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f bootc
+
+
 
