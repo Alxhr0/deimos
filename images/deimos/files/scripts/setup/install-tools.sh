@@ -37,8 +37,7 @@ su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
 xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f ostree libostree-devel
 
 # Bootc
-
-git clone "https://github.com/bootc-dev/bootc.git" /tmp/bootc
-make -C /tmp/bootc bin install-all PREFIX=/usr
-rm -rf /tmp/bootc
+cd /tmp/void-packages
+su builder -c 'cd /tmp/void-packages && ./xbps-src pkg bootc'
+xbps-install -y -R /tmp/void-packages/hostdir/binpkgs -f bootc
 
