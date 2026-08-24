@@ -53,9 +53,6 @@ new_args = """configure_args="--without-libsystemd --with-dracut=yes --with-comp
 
 text = prefix + new_args + suffix
 
-# Add libcomposefs-devel to makedepends cleanly
-text = text.replace("makedepends=\"", "makedepends=\"libcomposefs-devel ", 1)
-
 p.write_text(text)
 '
 su builder -c 'cd /tmp/void-packages && ./xbps-src pkg ostree'
